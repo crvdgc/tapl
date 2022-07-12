@@ -1,0 +1,14 @@
+(lang dune 2.9)
+(name tapl)
+(license MIT-0)
+
+; https://dune.readthedocs.io/en/stable/opam.html#generating-opam-files
+(generate_opam_files true)
+
+(cram enable)
+
+; https://dune.readthedocs.io/en/stable/concepts.html#package-specification
+(package
+ (name tapl)
+ (synopsis "Types and Programming Languages exercises")
+ (depends ounit2))
