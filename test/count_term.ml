@@ -1,5 +1,5 @@
 open Arith
 
-let t : term = Const Z
+let t : term = TmZero
 
 let () = Arith.size t |> print_int |> print_newline
