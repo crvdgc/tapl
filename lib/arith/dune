@@ -4,7 +4,7 @@
 ; - https://dune.readthedocs.io/en/stable/dune-files.html#library
 
 (library
- (name uarith))
+ (name arith))
 
 (documentation
  (package tapl))

@@ -6,12 +6,12 @@
 (test
  (name count_term)
  (modules count_term)
- (libraries uarith))
+ (libraries arith))
 
 (test
-  (name test_uarith)
-  (modules test_uarith)
-  (libraries ounit2 uarith))
+  (name test_arith)
+  (modules test_arith)
+  (libraries ounit2 arith))
 
 ; More information on Cram tests can be found in the Dune documentation:
 ;

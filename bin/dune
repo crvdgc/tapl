@@ -6,4 +6,4 @@
 (executable
  (name main)
  (public_name hello)
- (libraries uarith))
+ (libraries arith))
