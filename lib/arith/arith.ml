@@ -70,8 +70,6 @@ let is_val = function
 
 
 module type Eval = sig
-  exception NoRuleApplies
-
   val eval : term -> term
 end
 
@@ -103,12 +101,16 @@ let rec eval1 = function
 
 
 module SmallStep : Eval = struct
-  exception NoRuleApplies = NoRuleApplies
-
-  let eval = eval1
+  let rec eval t =
+    try
+      let t' = eval1 t in
+      eval t'
+    with
+    | NoRuleApplies ->
+        t
 end
 
-let rec eval_many = function
+let rec eval_many' = function
   | TmIf t ->
     ( match eval_many t.cond with
     | TmTrue ->
@@ -118,13 +120,19 @@ let rec eval_many = function
     | _ ->
         raise NoRuleApplies )
   | TmSucc t ->
-      TmSucc (eval_many t)
+    ( match eval_many t with
+    | nv when is_numeric_val nv ->
+        TmSucc nv
+    | _ ->
+        raise NoRuleApplies )
   | TmPred t ->
     ( match eval_many t with
     | TmZero ->
         TmZero
     | TmSucc nv when is_numeric_val nv ->
         nv
+    (* The book's implementation prevents evalutaion inside pred, which is
+     * actually different from the small step semantics. *)
     | _ ->
         raise NoRuleApplies )
   | TmIsZero t ->
@@ -138,6 +146,8 @@ let rec eval_many = function
   | _ ->
       raise NoRuleApplies
 
+
+and eval_many t = try eval_many' t with NoRuleApplies -> t
 
 module BigStep : Eval = struct
   let eval = eval_many
