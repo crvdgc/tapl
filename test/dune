@@ -11,7 +11,7 @@
 (test
   (name test_arith)
   (modules test_arith)
-  (libraries ounit2 arith))
+  (libraries arith ounit2 qcheck))
 
 ; More information on Cram tests can be found in the Dune documentation:
 ;

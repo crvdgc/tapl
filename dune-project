@@ -11,4 +11,4 @@
 (package
  (name tapl)
  (synopsis "Types and Programming Languages exercises")
- (depends ounit2))
+ (depends ounit2 qcheck utop ppx_deriving))

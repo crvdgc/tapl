@@ -4,7 +4,6 @@
 ; - https://dune.readthedocs.io/en/stable/dune-files.html#library
 
 (library
- (name arith))
+ (name arith)
+ (preprocess (pps ppx_deriving.show ppx_deriving.eq)))
 
-(documentation
- (package tapl))

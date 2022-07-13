@@ -5,6 +5,9 @@ license: "MIT-0"
 depends: [
   "dune" {>= "2.9"}
   "ounit2"
+  "qcheck"
+  "utop"
+  "ppx_deriving"
   "odoc" {with-doc}
 ]
 build: [

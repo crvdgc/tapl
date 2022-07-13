@@ -1,4 +1,4 @@
-(** Chapter 03 Untyped Arithmetic Expressions *)
+(** Chapter 3 & 4 Untyped Arithmetic Expressions *)
 
 type term =
   | TmTrue
@@ -13,6 +13,10 @@ type term =
   | TmPred of term
   | TmIsZero of term
 
+val equal_term : term -> term -> bool
+
+val show_term : term -> string
+
 val size : term -> int
 
 val depth : term -> int
@@ -23,12 +27,15 @@ val is_val : term -> bool
 
 exception NoRuleApplies
 
-val eval1 : term -> term
-
 module type Eval = sig
-  exception NoRuleApplies
-
   val eval : term -> term
 end
 
+val eval1 : term -> term
+
 module SmallStep : Eval
+
+val eval_many : term -> term
+(** Exercise 4.2.2 *)
+
+module BigStep : Eval

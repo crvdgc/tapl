@@ -10,6 +10,28 @@ type term =
   | TmSucc of term
   | TmPred of term
   | TmIsZero of term
+[@@deriving eq]
+
+let rec show_term = function
+  | TmTrue ->
+      "true"
+  | TmFalse ->
+      "false"
+  | TmIf t ->
+      Format.sprintf
+        "(if %s then %s else %s)"
+        (show_term t.cond)
+        (show_term t.tbranch)
+        (show_term t.fbranch)
+  | TmZero ->
+      "0"
+  | TmSucc t ->
+      Format.sprintf "(succ %s)" (show_term t)
+  | TmPred t ->
+      Format.sprintf "(pred %s)" (show_term t)
+  | TmIsZero t ->
+      Format.sprintf "(iszero %s)" (show_term t)
+
 
 let rec size = function
   | TmTrue | TmFalse | TmZero ->
@@ -118,7 +140,5 @@ let rec eval_many = function
 
 
 module BigStep : Eval = struct
-  exception NoRuleApplies = NoRuleApplies
-
   let eval = eval_many
 end
