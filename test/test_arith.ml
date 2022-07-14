@@ -17,6 +17,7 @@ let term_gen =
   in
   Gen.sized @@ Gen.fix f
 
+
 (* The book's inference rules for big step actually differ from small step when
       the term is 'wrong'.
 
@@ -35,7 +36,49 @@ let term_gen =
    let () = QCheck2.Test.check_exn prop_congruity_big_step_small_step
 *)
 
+type ret_type =
+  | B
+  | Z
+
 let good_term_gen =
-  let pure_bool_terms = [ TmTrue; TmFalse; ] in
-  let pure_int_term = TmZero in
-  let unary_bool_
+  let is_zero_term x = TmIsZero x in
+  let if_term cond tbranch fbranch = TmIf { cond; tbranch; fbranch } in
+  let unary_terms_i = [ (fun x -> TmSucc x); (fun x -> TmPred x) ] in
+  let f self (n, ret) : term Gen.t =
+    Gen.(
+      match n with
+      | 0 ->
+        ( match ret with
+        | B ->
+            oneof @@ List.map pure [ TmTrue; TmFalse ]
+        | Z ->
+            pure TmZero )
+      | n ->
+        ( match ret with
+        | B ->
+            oneof
+            @@ [ map is_zero_term (self (n - 1, Z))
+               ; map3
+                   if_term
+                   (self (n / 3, B))
+                   (self (n / 3, B))
+                   (self (n / 3, B))
+               ]
+        | Z ->
+            oneof
+            @@ map3
+                 if_term
+                 (self (n / 3, B))
+                 (self (n / 3, Z))
+                 (self (n / 3, Z))
+               :: List.map (Fun.flip map (self (n - 1, Z))) unary_terms_i ))
+  in
+  Gen.(sized (fun n -> fix f (n, B)))
+
+
+let show_good_term () = print_string @@ show_term @@ Gen.generate1 good_term_gen
+
+let () =
+  Test.check_exn
+  @@ Test.make ~name:"hello" ~print:show_term good_term_gen (fun term ->
+         BigStep.eval term = SmallStep.eval term )

@@ -54,7 +54,7 @@ let rec depth = function
 let rec is_numeric_val = function
   | TmZero ->
       true
-  | TmIsZero t ->
+  | TmSucc t ->
       is_numeric_val t
   | _ ->
       false
