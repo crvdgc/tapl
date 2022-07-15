@@ -1,0 +1,9 @@
+; More information on specifying libraries can be found in the Dune documentation:
+;
+; - https://dune.readthedocs.io/en/stable/concepts.html#libraries
+; - https://dune.readthedocs.io/en/stable/dune-files.html#library
+
+(library
+ (name untyped)
+ (preprocess (pps ppx_deriving.eq)))
+
